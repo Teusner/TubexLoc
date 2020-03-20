@@ -46,25 +46,16 @@ int main(int argc, char** argv)
 
     // Contractor Network
     ContractorNetwork cn;
-    ibex::CtcFwdBwd ctc_sub(*new ibex::Function("x", "y", "z", "x+y-z"));
     ibex::CtcFwdBwd ctc_add(*new ibex::Function("x", "y", "z", "x-y-z"));
-
-    Interval d1 = (NEG_INFINITY, POS_INFINITY);
-    Interval d2 = (NEG_INFINITY, POS_INFINITY);
-    Interval alpha = (NEG_INFINITY, POS_INFINITY);
+    ibex::CtcFwdBwd ctc_sub(*new ibex::Function("x", "y", "z", "x-y+z"));
 
     pyibex::CtcPolar ctc_polar;
-    /*IntervalVector c(4);
-    c[0] = d1;
-    c[1] = d2;
-    c[2] = v_obs[0][0];
-    c[3] = alpha;
-    cn.add(ctc_polar, c);*/
+    Interval d1, d2, alpha;
 
-    cn.add(ctc_sub, d1, x[0], v_b[0][0]);
-    cn.add(ctc_sub, d2, x[1], v_b[0][1]);
-    cn.add(ctc_add, alpha, x[2], v_obs[0][1]);
-    cn.add(ctc_polar, d1, d2, v_obs[0][1], alpha);
+    cn.add(ctc_sub, d1, v_b[0][0], x[0]);
+    cn.add(ctc_sub, d2, v_b[0][1], x[1]);
+    cn.add(ctc_add, alpha, v_obs[0][1], x[2]);
+    cn.add(ctc_polar, d1, d2, v_obs[0][0], alpha);
     cn.contract();
 
     /* =========== GRAPHICS =========== */
