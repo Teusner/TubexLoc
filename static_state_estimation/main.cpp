@@ -44,22 +44,25 @@ int main(int argc, char** argv)
     x[1] = Interval(NEG_INFINITY, POS_INFINITY);
     x[2] = Interval(truth[2], truth[2]);
 
-    // Contrctor
-    pyibex::CtcPolar ctc_polar;
-    IntervalVector d(4);
-    d[0] = x[0];
-    d[1] = x[1];
-    d[2] = v_obs[0][0];
-    d[3] = v_obs[0][1] + x[3];
-    //ctc_polar.contract(d);
-
     // Contractor Network
     ContractorNetwork cn;
-    ibex::CtcFwdBwd ctc_sub(*new ibex::Function("x", "y", "a", "x-a"));
-    cn.add(ctc_polar, d);
-    cn.add(ctc_sub, d[0], d[2], v_b[0][0]);
-    cn.add(ctc_sub, d[1], d[1], v_b[0][1]);
+    ibex::CtcFwdBwd ctc_add(*new ibex::Function("x", "y", "z", "x=y+z"));
+    ibex::CtcFwdBwd ctc_sub(*new ibex::Function("x", "y", "z", "x=y-z"));
+    Interval d1 = (NEG_INFINITY, POS_INFINITY);
+    Interval d2 = (NEG_INFINITY, POS_INFINITY);
+    Interval alpha = (NEG_INFINITY, POS_INFINITY);
 
+    cn.add(ctc_sub, d1, v_b[0][0], x[0]);
+    cn.add(ctc_sub, d2, v_b[0][1], x[1]);
+    cn.add(ctc_add, alpha, x[2], v_obs[0][1]);
+
+    pyibex::CtcPolar ctc_polar;
+    IntervalVector d(4);
+    d[0] = d1;
+    d[1] = d2;
+    d[2] = v_obs[0][0];
+    d[3] = alpha;
+    cn.add(ctc_polar, d);
 
     // Use the contractor to contract intervals
     cn.contract();
