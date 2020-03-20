@@ -39,25 +39,29 @@ int main(int argc, char** argv)
     // - one observation: v_obs[0]
 
     // Generating a domain of state
-    IntervalVector c(3);
-    c[0] = Interval(NEG_INFINITY, POS_INFINITY);
-    c[1] = Interval(NEG_INFINITY, POS_INFINITY);
-    c[2] = Interval(truth[2], truth[2]);
+    IntervalVector x(3);
+    x[0] = Interval(NEG_INFINITY, POS_INFINITY);
+    x[1] = Interval(NEG_INFINITY, POS_INFINITY);
+    x[2] = Interval(truth[2], truth[2]);
 
     // Contrctor
     pyibex::CtcPolar ctc_polar;
     IntervalVector d(4);
-    d[0] = c[0] - v_b[0][0];
-    d[1] = c[1] - v_b[0][1];
+    d[0] = x[0];
+    d[1] = x[1];
     d[2] = v_obs[0][0];
-    d[3] = v_obs[0][1];
-    ctc_polar.contract(d);
+    d[3] = v_obs[0][1] + x[3];
+    //ctc_polar.contract(d);
 
     // Contractor Network
     ContractorNetwork cn;
+    ibex::CtcFwdBwd ctc_sub(*new ibex::Function("x", "y", "a", "x-a"));
     cn.add(ctc_polar, d);
+    cn.add(ctc_sub, d[0], d[2], v_b[0][0]);
+    cn.add(ctc_sub, d[1], d[1], v_b[0][1]);
 
-    // Get the estimated state
+
+    // Use the contractor to contract intervals
     cn.contract();
 
 
@@ -71,7 +75,7 @@ int main(int argc, char** argv)
         fig_map.add_beacon(Beacon(iv), 0.2);
     fig_map.draw_vehicle(truth, 1.);
     fig_map.axis_limits(map_area);
-    fig_map.draw_box(c.subvector(0,1)); // estimated position (2d box)
+    fig_map.draw_box(x.subvector(0,1)); // estimated position (2d box)
     fig_map.show();
     
   /* =========== ENDING =========== */
