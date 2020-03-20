@@ -1,0 +1,81 @@
+#include <ibex.h>
+#include <tubex.h>
+#include <tubex-rob.h>
+#include <tubex-3rd.h>
+#include <iostream>
+
+using namespace std;
+using namespace ibex;
+using namespace tubex;
+
+int main(int argc, char** argv)
+{
+  /* =========== CREATING DATA =========== */
+
+    // Truth (unknown pose)
+    Vector truth(3,0.);
+    truth[2] = M_PI/6.; // heading
+
+    // Creating random map of landmarks
+    const int nb_landmarks = 1;
+    const IntervalVector map_area(2, Interval(-8.,8.));
+    vector<IntervalVector> v_b = DataLoader::generate_landmarks_boxes(map_area, nb_landmarks);
+    vector<IntervalVector> v_obs = DataLoader::generate_observations(truth, v_b);
+
+    // Adding uncertainties on the measurements
+    for(auto& obs : v_obs) {
+      obs[0].inflate(0.5); // range
+      obs[1].inflate(0.1); // bearing
+    }
+
+
+
+
+
+  /* =========== TO DO =========== */
+
+    // Note that for now, we only consider:
+    // - one landmark: v_b[0]
+    // - one observation: v_obs[0]
+
+    // Generating a domain of state
+    IntervalVector c(3);
+    c[0] = Interval(NEG_INFINITY, POS_INFINITY);
+    c[1] = Interval(NEG_INFINITY, POS_INFINITY);
+    c[2] = Interval(truth[2], truth[2]);
+
+    // Contrctor
+    pyibex::CtcPolar ctc_polar;
+    IntervalVector d(4);
+    d[0] = c[0] - v_b[0][0];
+    d[1] = c[1] - v_b[0][1];
+    d[2] = v_obs[0][0];
+    d[3] = v_obs[0][1];
+    ctc_polar.contract(d);
+
+    // Contractor Network
+    ContractorNetwork cn;
+    cn.add(ctc_polar, d);
+
+    // Get the estimated state
+    cn.contract();
+
+
+    /* =========== GRAPHICS =========== */
+
+    vibes::beginDrawing();
+    VIBesFigMap fig_map("Map");
+    fig_map.set_properties(50, 50, 600, 600);
+    fig_map.add_observations(v_obs, truth);
+    for(const auto& iv : v_b)
+        fig_map.add_beacon(Beacon(iv), 0.2);
+    fig_map.draw_vehicle(truth, 1.);
+    fig_map.axis_limits(map_area);
+    fig_map.draw_box(c.subvector(0,1)); // estimated position (2d box)
+    fig_map.show();
+    
+  /* =========== ENDING =========== */
+
+    vibes::endDrawing();
+    return EXIT_SUCCESS;
+}

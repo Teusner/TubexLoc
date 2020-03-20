@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="tubex_tuto_02" targetName="tubex_tuto_02" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="33071b7e-f469-4ac9-8573-992890035ece" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="ProjectId" id="1ZNoXIVzOAhrkd4ygwgy27yS5AU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager">
+    <configuration name="tubex_tuto_02" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="tubex_tuto_02" TARGET_NAME="tubex_tuto_02" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="tubex_tuto_02" RUN_TARGET_NAME="tubex_tuto_02">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="33071b7e-f469-4ac9-8573-992890035ece" name="Default Changelist" comment="" />
+      <created>1584688950536</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584688950536</updated>
+      <workItem from="1584688955618" duration="4383000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1558" height="204" key="GridCell.Tab.0.bottom" timestamp="1584693545438">
+      <screen x="1280" y="124" width="1600" height="900" />
+    </state>
+    <state width="1558" height="204" key="GridCell.Tab.0.bottom/1280.124.1600.900/0.34.1280.990@1280.124.1600.900" timestamp="1584693545438" />
+    <state width="1558" height="204" key="GridCell.Tab.0.center" timestamp="1584693545437">
+      <screen x="1280" y="124" width="1600" height="900" />
+    </state>
+    <state width="1558" height="204" key="GridCell.Tab.0.center/1280.124.1600.900/0.34.1280.990@1280.124.1600.900" timestamp="1584693545437" />
+    <state width="1558" height="204" key="GridCell.Tab.0.left" timestamp="1584693545437">
+      <screen x="1280" y="124" width="1600" height="900" />
+    </state>
+    <state width="1558" height="204" key="GridCell.Tab.0.left/1280.124.1600.900/0.34.1280.990@1280.124.1600.900" timestamp="1584693545437" />
+    <state width="1558" height="204" key="GridCell.Tab.0.right" timestamp="1584693545438">
+      <screen x="1280" y="124" width="1600" height="900" />
+    </state>
+    <state width="1558" height="204" key="GridCell.Tab.0.right/1280.124.1600.900/0.34.1280.990@1280.124.1600.900" timestamp="1584693545438" />
+  </component>
+</project>
