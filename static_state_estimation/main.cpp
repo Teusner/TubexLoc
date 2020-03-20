@@ -3,6 +3,7 @@
 #include <tubex-rob.h>
 #include <tubex-3rd.h>
 #include <iostream>
+#include "CtcAssociation.h"
 
 using namespace std;
 using namespace ibex;
@@ -28,17 +29,8 @@ int main(int argc, char** argv)
       obs[1].inflate(0.1); // bearing
     }
 
+  /* =========== Localisation Processing =========== */
 
-
-
-
-  /* =========== TO DO =========== */
-
-    // Note that for now, we only consider:
-    // - one landmark: v_b[0]
-    // - one observation: v_obs[0]
-
-    // Generating a domain of state
     IntervalVector x(3);
     x[0] = Interval(NEG_INFINITY, POS_INFINITY);
     x[1] = Interval(NEG_INFINITY, POS_INFINITY);
@@ -57,6 +49,18 @@ int main(int argc, char** argv)
     cn.add(ctc_add, alpha, v_obs[0][1], x[2]);
     cn.add(ctc_polar, d1, d2, v_obs[0][0], alpha);
     cn.contract();
+
+    /* =========== Association Tests ===========*/
+    IntervalVector a1(2, Interval(2, 3));
+    IntervalVector a2(2, Interval(5, 6));
+    b[1] = Interval(4, 5);
+    IntervalVector a3(2, Interval(9, 10));
+    c[1] = Interval(2, 3);
+
+    IntervalVector box (2, Interval());
+
+    std::vector<ibex::IntervalVector> = {a1, a2, a3};
+    CtcAssociation(box);
 
     /* =========== GRAPHICS =========== */
 
