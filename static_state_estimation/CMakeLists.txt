@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(tubex_tuto_02 LANGUAGES CXX)
+project(Static_Localization LANGUAGES CXX)
 
 # Compilation options
 set(CMAKE_CXX_STANDARD 11)
@@ -14,8 +14,12 @@ include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag("-Wno-deprecated" COMPILER_SUPPORTS_WNO_DEPRECATED)
 
 # Compilation
-add_executable(${PROJECT_NAME} main.cpp)
-add_executable(association CtcAssociation.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/CtcAssociation.cpp)
 target_compile_options(${PROJECT_NAME} PUBLIC ${TUBEX_CFLAGS})
 target_include_directories(${PROJECT_NAME} PUBLIC ${TUBEX_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} association PUBLIC ${TUBEX_LDFLAGS})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${TUBEX_LDFLAGS})
+
+add_executable(Association src/Association.cpp src/CtcAssociation.cpp)
+target_compile_options(Association PUBLIC ${TUBEX_CFLAGS})
+target_include_directories(Association PUBLIC ${TUBEX_INCLUDE_DIRS})
+target_link_libraries(Association PUBLIC ${TUBEX_LDFLAGS})
