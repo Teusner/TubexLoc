@@ -18,7 +18,7 @@ int main() {
 
     // Creating random map of landmarks
     const int nb_landmarks = 3;
-    const IntervalVector map_area(2, Interval(-8.,8.));
+    const IntervalVector map_area(2, Interval(-4.,4.));
     vector<IntervalVector> v_b = DataLoader::generate_landmarks_boxes(map_area, nb_landmarks);
 
     // Generating range-only observations of these landmarks
@@ -43,10 +43,10 @@ int main() {
     for(const auto& iv : v_b)
         fig_map.add_beacon(Beacon(iv), 0.2);
     for(int i = 0 ; i < v_range.size() ; i++) {
-        fig_map.draw_circle(v_b[i][0].mid(), v_b[i][1].mid(), v_range[i].lb(), "gray");
-        fig_map.draw_circle(v_b[i][0].mid(), v_b[i][1].mid(), v_range[i].ub(), "gray");
+        fig_map.draw_circle(v_b[i][0].mid(), v_b[i][1].mid(), v_range[i].ub(), "#2980b9");
+        fig_map.draw_circle(v_b[i][0].mid(), v_b[i][1].mid(), v_range[i].lb(), "#2980b9");
     }
-    fig_map.draw_box(x.subvector(0,1)); // estimated position
+    fig_map.draw_box(x.subvector(0,1), "#2980b9[#ECF0F1]"); // estimated position
     fig_map.draw_vehicle(truth, 1.);
     fig_map.show();
     vibes::endDrawing();
