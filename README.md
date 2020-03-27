@@ -1,24 +1,30 @@
 # Static state estimation
 
 ## Introduction
-This program try to estimate the state of an AUV (*Autonomous Underwater Vehicle*) with 
+These program are trying to estimate the state of an AUV (*Autonomous Underwater Vehicle*) with 
 range localization. It use Interval Analysis from the *ibex* library and *VIBes* in order
 to display results.
 
 ## Build
- To build this program, run the following command in a terminal :
+ To build each program, run the following command in a terminal in each project folder :
  ```bash
 mkdir build
 cd build
 cmake ..
 make 
 ```
-Now you are able to launch the executable with 
-```bash
-./Static_Localization
-```
+Now you are able to launch the executable newly created in the build folder
 
-## Example
+## Trilateration
+A trilateration example is available in *static_localization*. It try to find the localization of
+the submarine by the knowledge of landmarks position and their range with the robot. The estimated
+localization of the robot is represented by the blue box around the real position of the robot.
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Teusner/TubexLoc/master/static_localization/doc/trilateration.png" width="600">
+</p>
+
+## State estimation
 Here is an example of output in *VIBes* we could have after a launch. The robot is displayed
 at the center, the landmarks are displayed in orange and the estimated state of the robot
 is displayed with the blue box.
