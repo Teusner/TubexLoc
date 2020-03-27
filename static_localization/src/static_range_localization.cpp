@@ -51,16 +51,39 @@ int main(int argc, char** argv)
     cn.contract();
 
     /* =========== Association Tests ===========*/
-    IntervalVector a1(2, Interval(2, 3));
-    IntervalVector a2(2, Interval(5, 6));
-    b[1] = Interval(4, 5);
-    IntervalVector a3(2, Interval(9, 10));
-    c[1] = Interval(2, 3);
+    vector<ibex::IntervalVector> map;
+    ibex::IntervalVector b1{{2,3},{2,3}};
+    ibex::IntervalVector b2{{5,6},{4,5}};
+    ibex::IntervalVector b3{{9,10},{2,3}};
+    map.push_back(b1);
+    map.push_back(b2);
+    map.push_back(b3);
 
-    IntervalVector box (2, Interval());
 
-    std::vector<ibex::IntervalVector> = {a1, a2, a3};
-    CtcAssociation(box);
+
+    ibex::IntervalVector a1{{0,4},{0,4}};
+    ibex::IntervalVector a2{{3.5,11},{1,6}};
+
+    /* =========== Graphics ===========*/
+    vibes::beginDrawing();
+    VIBesFigMap fig_asso("Association");
+    fig_asso.set_properties(50,50,1000,600);
+    ibex::IntervalVector win_area{{-1,11},{-1, 7}};
+    fig_asso.axis_limits(win_area);
+
+    fig_asso.draw_box(b1, "black");
+    fig_asso.draw_box(b2, "black");
+    fig_asso.draw_box(b3, "black");
+
+    fig_asso.draw_box(a1, "blue");
+    fig_asso.draw_box(a2, "blue");
+
+    CtcAssociation ctc_asso(map);
+    ctc_asso.contract(a1);
+    ctc_asso.contract(a2);
+
+    fig_asso.draw_box(a1, "orange");
+    fig_asso.draw_box(a2, "orange");
 
     /* =========== GRAPHICS =========== */
 
