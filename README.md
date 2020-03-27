@@ -23,7 +23,9 @@ Here is an example of output in *VIBes* we could have after a launch. The robot 
 at the center, the landmarks are displayed in orange and the estimated state of the robot
 is displayed with the blue box.
 
-<img src="https://raw.githubusercontent.com/Teusner/TubexLoc/master/static_state_estimation/doc/static_localization.png" width=400 align=center>
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Teusner/TubexLoc/master/static_state_estimation/doc/static_localization.png" width="600">
+</p>
 
 ## Association Contractor
 In this project we need to build a contractor of association which contract boxes around
@@ -31,7 +33,9 @@ detected landmarks. An example of this Contractor is available in the *Associati
 It let us contract the blue boxes around landmarks represented in grey in order to get the
 orange boxes in the following example.
 
-<img src="https://raw.githubusercontent.com/Teusner/TubexLoc/master/static_state_estimation/doc/association.png" width=400 align=center>
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Teusner/TubexLoc/master/static_state_estimation/doc/association.png" width="600">
+</p>
 
 ## Built With
 
