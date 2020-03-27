@@ -23,7 +23,7 @@ Here is an example of output in *VIBes* we could have after a launch. The robot 
 at the center, the landmarks are displayed in orange and the estimated state of the robot
 is displayed with the blue box.
 
-![Static localization example](./doc/static_localization.png)
+![Static localization example](./static_state_estimation/doc/static_localization.png)
 
 ## Association Contractor
 In this project we need to build a contractor of association which contract boxes around
@@ -31,7 +31,7 @@ detected landmarks. An example of this Contractor is available in the *Associati
 It let us contract the blue boxes around landmarks represented in grey in order to get the
 orange boxes in the following example.
 
-![Association Contractor](./doc/association.png)
+![Association Contractor](./static_state_estimation/doc/association.png)
 
 ## Built With
 
