@@ -22,7 +22,6 @@ int main()
                           atan2(240*cos(2*t),-240*sin(t)))"));
 
     // Sets of trajectories
-
       const double dt = 0.01; // tube timestep
 
       TubeVector x(domain, dt, 2); // unbounded 2d tube vector
@@ -81,8 +80,7 @@ int main()
     // Add CtcDeriv here...
     // ...
 
-    for(int i = 0 ; i < v_obs.size() ; i++)
-    {
+    for (int i = 0 ; i < v_obs.size() ; i++) {
       // Measurement i (simple shortcuts)
       Interval &t  = v_obs[i][0]; // time
       Interval &y1 = v_obs[i][1]; // range

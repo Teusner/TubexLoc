@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
 
     ibex::IntervalVector a1{{0,4},{0,4}};
     ibex::IntervalVector a2{{3.5,11},{1,6}};
+    ibex::IntervalVector a3{{4.5,8},{-0.5,3}};
 
     // =========== Graphics ===========
 
@@ -37,6 +38,7 @@ int main(int argc, char** argv) {
 
     fig_asso.draw_box(a1, "#2980b9");
     fig_asso.draw_box(a2, "#2980b9");
+    fig_asso.draw_box(a3, "#2980b9");
 
     CtcAssociation ctc_asso(map);
     ctc_asso.contract(a1);
