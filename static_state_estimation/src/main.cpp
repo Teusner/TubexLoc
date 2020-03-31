@@ -17,9 +17,11 @@ int main(int argc, char** argv) {
     truth[2] = M_PI/6.; // heading
 
     // Creating random map of landmarks
-    const int nb_landmarks = 1;
+    const int nb_landmarks = 4;
     const IntervalVector map_area(2, Interval(-8.,8.));
     vector<IntervalVector> v_b = DataLoader::generate_landmarks_boxes(map_area, nb_landmarks);
+    for(auto& b : v_b)
+        b = b.subvector(0,1);
     vector<IntervalVector> v_obs = DataLoader::generate_observations(truth, v_b);
 
     // Adding uncertainties on the measurements
@@ -48,8 +50,8 @@ int main(int argc, char** argv) {
 
         // Contractor Network
         cn.add(ctc_asso, m_i);
-        cn.add(ctc_sub, d1, v_b[i][0], x[0]);
-        cn.add(ctc_sub, d2, v_b[i][1], x[1]);
+        cn.add(ctc_sub, d1, m_i[0], x[0]);
+        cn.add(ctc_sub, d2, m_i[1], x[1]);
         cn.add(ctc_add, alpha, v_obs[i][1], x[2]);
         cn.add(ctc_polar, d1, d2, v_obs[i][0], alpha);
     }
