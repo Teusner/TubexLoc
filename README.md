@@ -12,7 +12,7 @@ mkdir build
 cd build
 cmake ..
 make 
-```
+ ```
 Now you are able to launch the executable newly created in the build folder
 
 ## Trilateration
@@ -41,6 +41,13 @@ orange boxes in the following example.
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/Teusner/TubexLoc/master/static_state_estimation/doc/association.png" width="600">
+</p>
+
+## The final state estimation without any informations about the real landmarks position
+That's the final state estimation for this problem. We don't have any informations about the landmarks position but we could find them with our association's contractor in order to bind our measurements and the real landmarks.
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/Teusner/TubexLoc/master/static_state_estimation/doc/static_state_estimation.png" width="600">
 </p>
 
 ## Built With
