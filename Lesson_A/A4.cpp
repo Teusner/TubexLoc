@@ -29,6 +29,11 @@ int main() {
 
 	x.inflate(0.1, 0.1);
 
+	c = cart_prod(x, b);
+	y = g.eval(c);
+
+	std::cout << y << std::endl;
+
 	VIBesFigMap fig2("Landmark Detection 2");
 	fig2.set_properties(50, 50, 400, 400);
 	fig2.axis_limits(IntervalVector({{-6,6},{-6,6}}));
