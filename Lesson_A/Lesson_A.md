@@ -25,3 +25,14 @@ The output of the programm is :
 ```
 
 ## A4
+
+We could see that the landmarks belong to the ring area, which is the goal of this question. With this contractor, we found every solutions at the considered distance of x = [0, 0]. Moreover, with a little incertainty on the robot's state, we get an extra incertainty on the ring, and it's also quite wider than before, but the landmarks always belongs to the area.
+
+| *Ctc_dist* with landmark   | *Ctc_dist* with uncertainty|
+|:--------------------------:|:--------------------------:|
+|![](./images/A4_range_1.png)|![](./images/A4_range_2.png)|
+
+## A8
+
+On the following figure, we could see that the box are contracted by the *ContractorNetwork* respecting to the distance from x condition.
+![](./images/A8_contractor.png)
