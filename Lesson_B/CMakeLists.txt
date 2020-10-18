@@ -26,7 +26,7 @@
 
 # Compilation
 
-  file( GLOB APP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp )
+  file( GLOB APP_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp )
   foreach( sourcefile ${APP_SOURCES} )
       get_filename_component( filename ${sourcefile} NAME_WE )
       add_executable( ${filename} ${sourcefile} )

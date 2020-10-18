@@ -1,5 +1,5 @@
 # ==================================================================
-#  tubex-lib / Lesson-A - cmake configuration file
+#  tubex-lib / Lesson-C - cmake configuration file
 # ==================================================================
 
   cmake_minimum_required(VERSION 3.0.2)

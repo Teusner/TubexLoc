@@ -1,3 +1,6 @@
+*.vscode
+*gmon.out
+
 # Jetbrain files
 *.idea/*
 */.idea/*
