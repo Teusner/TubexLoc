@@ -1,9 +1,9 @@
 # ==================================================================
-#  tubex-lib / Lesson-E - cmake configuration file
+#  tubex-lib / Lesson-F - cmake configuration file
 # ==================================================================
 
   cmake_minimum_required(VERSION 3.0.2)
-  project(Lesson-E LANGUAGES CXX)
+  project(Lesson-F LANGUAGES CXX)
 
 # Adding IBEX
 
