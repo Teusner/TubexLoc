@@ -7,8 +7,8 @@ using namespace tubex;
 
 int main() {
 
-	double dt = 0.005;
-	Interval tdomain(0, 3);
+	double dt = 0.05;
+	Interval tdomain(0, 6);
 
 	// Unknown trajectory
 	TrajectoryVector actual_x({
@@ -16,55 +16,45 @@ int main() {
 		Trajectory(tdomain, TFunction("5*sin(2*t)+t"), dt)
 	});
 
-	// TubeVector x unknown
-	TubeVector x(tdomain, dt, 2);
 
-	// TubeVector v measured with a noise in [-0.03; 0.03]
-	TubeVector v(tdomain, dt, TFunction("(-10*sin(t)+1 ; 10*cos(2*t)+1)"));
-	v.inflate(0.03);
-
-	// Time
-	IntervalVector t({Interval(0.3), Interval(1.5), Interval(2)});
-
-	// Distance
-	IntervalVector y({Interval(1.9), Interval(3.6), Interval(2.8)});
-	y.inflate(0.1);
-
-	// Landmarks
-	vector<Vector> b(3, Vector(2));
-	b[0] = Vector({8, 3});
-	b[1] = Vector({0, 5});
-	b[2] = Vector({-2, 1});
+	// Creating random map of landmarks
+	int nb_landmarks = 150;
+	IntervalVector map_area(actual_x.codomain().subvector(0,1));
+	map_area.inflate(2);
+	vector<IntervalVector> v_map = DataLoader::generate_landmarks_boxes(map_area, nb_landmarks);
 
 
-	vector<IntervalVector> d(3, IntervalVector(2, Interval(-10, 10)));
+	// Generating observations obs=(t,range,bearing) of these landmarks
+	int max_nb_obs = 20;
+	Interval visi_range(0, 4); // [0m,75m]
+	Interval visi_angle(-M_PI/4, M_PI/4); // frontal sonar
+	vector<IntervalVector> v_obs = DataLoader::generate_observations(actual_x, v_map, max_nb_obs, true, visi_range, visi_angle);
 	
-	ContractorNetwork cn;
-	for(int i=0; i<t.size(); i++) {
-		cn.add(ctc::deriv, {x, v});
-		cn.add(ctc::dist, {d[i], b[i], y[i]});
-        cn.add(ctc::eval, {t[i], d[i], x, v});
-    }
-	cn.contract();
+	// Inflating the observations
+	for (auto& v:v_obs){
+		v[0].inflate(0.1);
+		v[1].inflate(0.04);
+		v[2].inflate(0.04);
+	}
 
-	for(int i=0; i<t.size(); i++) {
-		std::cout << d[i] << std::endl;
-    }
 
 	vibes::beginDrawing();
 
 	VIBesFigMap fig_map("Map");	
 	fig_map.set_properties(100, 100, 600, 300);
-	TrajectoryVector position = actual_x.subvector(0, 1);
-	fig_map.add_trajectory(&position, "x*", 0, 1);
-	fig_map.axis_limits(-2.5,2.5,-0.1,0.1, true);
+	fig_map.axis_limits(map_area, true);
 
-	for(int i = 0 ; i < b.size() ; i++) {
-		Beacon bi(b[i]);
-		fig_map.draw_circle(bi.x(), bi.y(), y[i].ub(), "grey"); 
-		fig_map.draw_circle(bi.x(), bi.y(), y[i].lb(), "grey");
+	// Showing beacons
+	for(const auto& b:v_map) {
+		Beacon bi(b);
 		fig_map.add_beacon(bi, 0.2);
     }
-	fig_map.add_tube(&x, "x", 0, 1);
+
+	// Showing the trajectory
+	fig_map.add_trajectory(&actual_x, "x*", 0, 1);
+
+	// Showing measurements
+	fig_map.add_observations(v_obs, &actual_x);
+
 	fig_map.show(1);
 }
