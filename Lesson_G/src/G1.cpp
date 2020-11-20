@@ -16,6 +16,13 @@ int main() {
 		Trajectory(tdomain, TFunction("5*sin(2*t)+t"), dt)
 	});
 
+	// TubeVector x unknown
+	TubeVector x(tdomain, dt, 3);
+
+	// TubeVector v measured with a noise in [-0.03; 0.03]
+	TubeVector v(tdomain, dt, TFunction("(-10*sin(t)+1 ; 10*cos(2*t)+1)"));
+	v.inflate(0.03);
+
 
 	// Creating random map of landmarks
 	int nb_landmarks = 150;
@@ -37,7 +44,27 @@ int main() {
 		v[2].inflate(0.04);
 	}
 
+	// Contractor Network
+	ContractorNetwork cn;
+	cn.add(ctc::deriv, {x, v});
+	CtcConstell ctc_constell(v_map);
+	CtcFunction ctc_plus(Function("a", "b", "c", "b+c-a"));
+	for (const auto& obs:v_obs){
+		IntervalVector& bi = cn.create_dom(IntervalVector(2));
+		IntervalVector& pi = cn.create_dom(IntervalVector(2));
+		IntervalVector& li = cn.create_dom(IntervalVector(2));
+		Interval& thetai = cn.create_dom(Interval());
+		ctc_constell.contract(bi);
+		cn.add(ctc_plus, {bi[0], li[0], x[0]});
+		cn.add(ctc_plus, {bi[1], li[1], x[1]});
+		cn.add(ctc::dist, {pi, bi, obs[1]});
+		cn.add(ctc::polar, {li, obs[1], thetai});
+		cn.add(ctc_plus, {thetai, x[2], obs[2]});
+		cn.add(ctc::eval, {obs[0], obs[1], obs[2], x, v});
+	}
+	cn.contract();
 
+	// Graphical part
 	vibes::beginDrawing();
 
 	VIBesFigMap fig_map("Map");	
