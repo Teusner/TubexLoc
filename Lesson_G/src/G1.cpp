@@ -1,4 +1,5 @@
 #include <tubex.h>
+#include <tubex-rob.h>
 #include <vibes.h>
 #include <math.h>
 
@@ -21,14 +22,11 @@ int main() {
 	// TubeVector x and v unknown
 	TubeVector x(tdomain, dt, 4);
 	TubeVector v(tdomain, dt, 4);
+	TubeVector u(tdomain, dt, 2);
 
 	// Adding measured psi and v in the state
 	x[2] = Tube(actual_x[2], dt).inflate(0.01);
 	x[3] = Tube(actual_x[3], dt).inflate(0.01);
-
-	// u updating
-	v[2] = Tube(actual_x[2].diff(), dt).inflate(0.01);
-	v[3] = Tube(actual_x[3].diff(), dt).inflate(0.01);
 
 
 	// Creating random map of landmarks
@@ -55,6 +53,7 @@ int main() {
 	ContractorNetwork cn;
 
 	CtcConstell ctc_constell(v_map);
+	cout << v_map[0] << endl;
 
 	CtcFunction ctc_plus(Function("a", "b", "c", "b+c-a"));
 	CtcFunction ctc_eq(Function("a", "b", "a-b"));
@@ -63,6 +62,8 @@ int main() {
 	
 	cn.add(ctc_f1, {x[3], x[2], v[0]});
 	cn.add(ctc_f2, {x[3], x[2], v[1]});
+	cn.add(ctc_eq, {u[0], v[2]});
+	cn.add(ctc_eq, {u[1], v[3]});
 
 	cn.add(ctc::deriv, {x, v});
 
@@ -83,7 +84,7 @@ int main() {
 
 		// Distance processing
 		Interval& ai = cn.create_dom(Interval());
-		cn.add(ctc_plus, {ai, x[2], obs[2]});
+		cn.add(ctc_plus, {ai, pi[2], obs[2]});
 		cn.add(ctc::polar, {di, obs[1], ai});
 	}
 	cn.contract(true);
@@ -108,8 +109,7 @@ int main() {
 	fig_map.add_observations(v_obs, &actual_x);
 
 	// Showing the tube
-	TubeVector show_x = x.subvector(0, 1);
-	fig_map.add_tube(&show_x, "x*", 0, 1);
+	fig_map.add_tube(&x, "x*", 0, 1);
 
 	fig_map.show(1);
 }
