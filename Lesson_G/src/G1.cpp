@@ -53,7 +53,6 @@ int main() {
 	ContractorNetwork cn;
 
 	CtcConstell ctc_constell(v_map);
-	cout << v_map[0] << endl;
 
 	CtcFunction ctc_plus(Function("a", "b", "c", "b+c-a"));
 	CtcFunction ctc_eq(Function("a", "b", "a-b"));
@@ -68,10 +67,10 @@ int main() {
 	cn.add(ctc::deriv, {x, v});
 
 	for (const auto& obs:v_obs){
-		IntervalVector& bi = cn.create_dom(IntervalVector(2));
+		IntervalVector& mi = cn.create_dom(IntervalVector(2));
 
 		// Data association
-		cn.add(ctc_constell, {bi});
+		cn.add(ctc_constell, {mi});
 
 		// Evaluation of the measurement
 		IntervalVector& pi = cn.create_dom(IntervalVector(4));
@@ -79,8 +78,8 @@ int main() {
 
 		// Distance landmark / robot precessing
 		IntervalVector& di = cn.create_dom(IntervalVector(2));
-		cn.add(ctc_plus, {bi[0], pi[0], di[0]});
-		cn.add(ctc_plus, {bi[1], pi[1], di[1]});
+		cn.add(ctc_plus, {mi[0], pi[0], di[0]});
+		cn.add(ctc_plus, {mi[1], pi[1], di[1]});
 
 		// Distance processing
 		Interval& ai = cn.create_dom(Interval());
