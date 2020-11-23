@@ -13,15 +13,19 @@ int main() {
 	// Unknown trajectory
 	TrajectoryVector actual_x({
 		Trajectory(tdomain, TFunction("10*cos(t)+t"), dt),
-		Trajectory(tdomain, TFunction("5*sin(2*t)+t"), dt)
+		Trajectory(tdomain, TFunction("5*sin(2*t)+t"), dt),
+		Trajectory(tdomain, TFunction("atan2((10*cos(2*t)+1),(−10*sin(t)+1))"), dt),
+		Trajectory(tdomain, TFunction("sqrt((−10*sin(t)+1)^2+(10*cos(2t)+1)^2)"), dt)
 	});
 
-	// TubeVector x unknown
-	TubeVector x(tdomain, dt, 3);
+	// TubeVector x and v unknown
+	TubeVector x(tdomain, dt, 4);
+	TubeVector v(tdomain, dt, 4);
+	TubeVector u(tdomain, dt, 2);
 
-	// TubeVector v measured with a noise in [-0.03; 0.03]
-	TubeVector v(tdomain, dt, TFunction("(-10*sin(t)+1 ; 10*cos(2*t)+1)"));
-	v.inflate(0.03);
+	// Adding measured psi and v in the state
+	x[2] = Tube(actual_x[2], dt).inflate(0.01);
+	x[3] = Tube(actual_x[3], dt).inflate(0.01);
 
 
 	// Creating random map of landmarks
@@ -46,23 +50,43 @@ int main() {
 
 	// Contractor Network
 	ContractorNetwork cn;
-	cn.add(ctc::deriv, {x, v});
+
 	CtcConstell ctc_constell(v_map);
+
 	CtcFunction ctc_plus(Function("a", "b", "c", "b+c-a"));
+	CtcFunction ctc_eq(Function("a", "b", "a-b"));
+	CtcFunction ctc_f1(Function("v", "psi", "dx", "v*cos(psi)-dx"));
+    CtcFunction ctc_f2(Function("v", "psi", "dy", "v*sin(psi)-dy"));
+	
+	cn.add(ctc_f1, {x[3], x[2], v[0]});
+    cn.add(ctc_f2, {x[3], x[2], v[1]});
+	cn.add(ctc_eq, {u[0], v[2]});
+    cn.add(ctc_eq, {u[1], v[3]});
+
+	cn.add(ctc::deriv, {x, v});
+
 	for (const auto& obs:v_obs){
 		IntervalVector& bi = cn.create_dom(IntervalVector(2));
-		IntervalVector& pi = cn.create_dom(IntervalVector(2));
-		IntervalVector& li = cn.create_dom(IntervalVector(2));
-		Interval& thetai = cn.create_dom(Interval());
-		ctc_constell.contract(bi);
-		cn.add(ctc_plus, {bi[0], li[0], x[0]});
-		cn.add(ctc_plus, {bi[1], li[1], x[1]});
-		cn.add(ctc::dist, {pi, bi, obs[1]});
-		cn.add(ctc::polar, {li, obs[1], thetai});
-		cn.add(ctc_plus, {thetai, x[2], obs[2]});
-		cn.add(ctc::eval, {obs[0], obs[1], obs[2], x, v});
+		Interval &ti = cn.create_dom(obs[0].mid());
+
+		// Data association
+		cn.add(ctc_constell, {bi});
+
+		// Evaluation of the measurement
+		IntervalVector& pi = cn.create_dom(IntervalVector(4));
+		cn.add(ctc::eval, {ti, pi, x, v});
+
+		// Distance landmark / robot precessing
+		IntervalVector& di = cn.create_dom(IntervalVector(2));
+		cn.add(ctc_plus, {bi[0], pi[0], di[0]});
+		cn.add(ctc_plus, {bi[1], pi[1], di[1]});
+
+		// Distance processing
+		Interval& ai = cn.create_dom(Interval());
+		cn.add(ctc_plus, {ai, x[2], obs[2]});
+		cn.add(ctc::polar, {di, obs[1], ai});
 	}
-	cn.contract();
+	cn.contract(true);
 
 	// Graphical part
 	vibes::beginDrawing();
