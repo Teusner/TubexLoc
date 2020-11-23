@@ -44,7 +44,6 @@ int main() {
 	
 	// Inflating the observations
 	for (auto& v:v_obs){
-		v[0].inflate(0.1);
 		v[1].inflate(0.04);
 		v[2].inflate(0.04);
 	}
@@ -108,6 +107,7 @@ int main() {
 	fig_map.add_observations(v_obs, &actual_x);
 
 	// Showing the tube
+	fig_map.smooth_tube_drawing(true);
 	fig_map.add_tube(&x, "x*", 0, 1);
 
 	fig_map.show(1);
