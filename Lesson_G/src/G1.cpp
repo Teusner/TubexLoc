@@ -56,12 +56,12 @@ int main() {
 	CtcFunction ctc_plus(Function("a", "b", "c", "b+c-a"));
 	CtcFunction ctc_eq(Function("a", "b", "a-b"));
 	CtcFunction ctc_f1(Function("v", "psi", "dx", "v*cos(psi)-dx"));
-    CtcFunction ctc_f2(Function("v", "psi", "dy", "v*sin(psi)-dy"));
+	CtcFunction ctc_f2(Function("v", "psi", "dy", "v*sin(psi)-dy"));
 	
 	cn.add(ctc_f1, {x[3], x[2], v[0]});
-    cn.add(ctc_f2, {x[3], x[2], v[1]});
+	cn.add(ctc_f2, {x[3], x[2], v[1]});
 	cn.add(ctc_eq, {u[0], v[2]});
-    cn.add(ctc_eq, {u[1], v[3]});
+	cn.add(ctc_eq, {u[1], v[3]});
 
 	cn.add(ctc::deriv, {x, v});
 
@@ -99,7 +99,7 @@ int main() {
 	for(const auto& b:v_map) {
 		Beacon bi(b);
 		fig_map.add_beacon(bi, 0.2);
-    }
+	}
 
 	// Showing the trajectory
 	fig_map.add_trajectory(&actual_x, "x*", 0, 1);
