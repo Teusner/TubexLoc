@@ -14,18 +14,21 @@ int main() {
 	TrajectoryVector actual_x({
 		Trajectory(tdomain, TFunction("10*cos(t)+t"), dt),
 		Trajectory(tdomain, TFunction("5*sin(2*t)+t"), dt),
-		Trajectory(tdomain, TFunction("atan2((10*cos(2*t)+1),(−10*sin(t)+1))"), dt),
-		Trajectory(tdomain, TFunction("sqrt((−10*sin(t)+1)^2+(10*cos(2t)+1)^2)"), dt)
+		Trajectory(tdomain, TFunction("atan2((10*cos(2*t)+1),(-10*sin(t)+1))"), dt),
+		Trajectory(tdomain, TFunction("sqrt((-10*sin(t)+1)^2+(10*cos(2*t)+1)^2)"), dt)
 	});
 
 	// TubeVector x and v unknown
 	TubeVector x(tdomain, dt, 4);
 	TubeVector v(tdomain, dt, 4);
-	TubeVector u(tdomain, dt, 2);
 
 	// Adding measured psi and v in the state
 	x[2] = Tube(actual_x[2], dt).inflate(0.01);
 	x[3] = Tube(actual_x[3], dt).inflate(0.01);
+
+	// u updating
+	v[2] = Tube(actual_x[2].diff(), dt).inflate(0.01);
+	v[3] = Tube(actual_x[3].diff(), dt).inflate(0.01);
 
 
 	// Creating random map of landmarks
@@ -60,21 +63,18 @@ int main() {
 	
 	cn.add(ctc_f1, {x[3], x[2], v[0]});
 	cn.add(ctc_f2, {x[3], x[2], v[1]});
-	cn.add(ctc_eq, {u[0], v[2]});
-	cn.add(ctc_eq, {u[1], v[3]});
 
 	cn.add(ctc::deriv, {x, v});
 
 	for (const auto& obs:v_obs){
 		IntervalVector& bi = cn.create_dom(IntervalVector(2));
-		Interval &ti = cn.create_dom(obs[0].mid());
 
 		// Data association
 		cn.add(ctc_constell, {bi});
 
 		// Evaluation of the measurement
 		IntervalVector& pi = cn.create_dom(IntervalVector(4));
-		cn.add(ctc::eval, {ti, pi, x, v});
+		cn.add(ctc::eval, {obs[0], pi, x, v});
 
 		// Distance landmark / robot precessing
 		IntervalVector& di = cn.create_dom(IntervalVector(2));
@@ -106,6 +106,10 @@ int main() {
 
 	// Showing measurements
 	fig_map.add_observations(v_obs, &actual_x);
+
+	// Showing the tube
+	TubeVector show_x = x.subvector(0, 1);
+	fig_map.add_tube(&show_x, "x*", 0, 1);
 
 	fig_map.show(1);
 }
