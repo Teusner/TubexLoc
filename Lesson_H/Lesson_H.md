@@ -14,7 +14,7 @@ Dead reckoning is state estimation using only proprioceptive sensors like accele
 
 ## H3
 
-Adding 4 landmarks with unknown initial position, we are able to perform SLAM (Simultaneous Localisation and Mapping). Before contraction we have the dead reckoning tube enclosing the trajectory of the robot. After contracting we have a bow bounding every landmark, and the tube wich is quite thinner than before.
+Adding 4 landmarks with unknown initial position, we are able to perform SLAM (Simultaneous Localisation and Mapping). Before contraction we have the dead reckoning tube enclosing the trajectory of the robot. After contracting we have a box bounding every landmark, and the tube wich is quite thinner than before.
 
 | Before contraction | After contraction|
 |:-:|:-:|
